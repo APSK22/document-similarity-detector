@@ -1,0 +1,12 @@
+# Sample Document 2
+
+This text discusses machine learning and artificial intelligence applications.
+Machine learning has transformed healthcare, finance, and many other sectors.
+
+AI algorithms process large datasets to find patterns and make predictions.
+Neural networks and deep learning architectures enable advanced data processing.
+
+NLP technology helps computers comprehend and produce human language.
+Image recognition through computer vision lets machines understand visual data.
+
+Future developments in AI will impact robotics, automation, and healthcare personalization.

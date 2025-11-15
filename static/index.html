@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Similarity Detector</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Document Similarity Detector</h1>
+            <p class="subtitle">Information Retrieval & Semantic Web Analysis</p>
+        </header>
+
+        <div class="upload-section">
+            <div class="upload-box">
+                <div class="file-input-wrapper">
+                    <label for="file1" class="file-label">
+                        <div class="upload-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        <span>Choose Document 1</span>
+                        <span class="file-name" id="file1-name">No file selected</span>
+                    </label>
+                    <input type="file" id="file1" accept=".txt,.pdf,.doc,.docx" hidden>
+                </div>
+            </div>
+
+            <div class="upload-box">
+                <div class="file-input-wrapper">
+                    <label for="file2" class="file-label">
+                        <div class="upload-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        <span>Choose Document 2</span>
+                        <span class="file-name" id="file2-name">No file selected</span>
+                    </label>
+                    <input type="file" id="file2" accept=".txt,.pdf,.doc,.docx" hidden>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button id="analyzeBtn" class="analyze-btn" disabled>Analyze Similarity</button>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Analyzing documents...</p>
+        </div>
+
+        <div id="error" class="error-message" style="display: none;"></div>
+
+        <div id="results" class="results-section" style="display: none;">
+            <h2>Analysis Results</h2>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h3>Cosine Similarity</h3>
+                    <div class="metric-value" id="cosine-value">-</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" id="cosine-bar"></div>
+                    </div>
+                    <p class="metric-description">TF-IDF vector similarity</p>
+                </div>
+
+                <div class="metric-card">
+                    <h3>Jaccard Index</h3>
+                    <div class="metric-value" id="jaccard-value">-</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" id="jaccard-bar"></div>
+                    </div>
+                    <p class="metric-description">Set-based word overlap</p>
+                </div>
+
+                <div class="metric-card">
+                    <h3>LSA Similarity</h3>
+                    <div class="metric-value" id="lsa-value">-</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" id="lsa-bar"></div>
+                    </div>
+                    <p class="metric-description">Latent Semantic Analysis</p>
+                </div>
+
+                <div class="metric-card">
+                    <h3>BERT Similarity</h3>
+                    <div class="metric-value" id="bert-value">-</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" id="bert-bar"></div>
+                    </div>
+                    <p class="metric-description">Contextual embeddings</p>
+                </div>
+            </div>
+
+            <div class="ir-metrics">
+                <h3>Information Retrieval Metrics</h3>
+                <div class="ir-grid">
+                    <div class="ir-card">
+                        <span class="ir-label">Precision</span>
+                        <span class="ir-value" id="precision-value">-</span>
+                    </div>
+                    <div class="ir-card">
+                        <span class="ir-label">Recall</span>
+                        <span class="ir-value" id="recall-value">-</span>
+                    </div>
+                    <div class="ir-card">
+                        <span class="ir-label">F1-Score</span>
+                        <span class="ir-value" id="f1-value">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-section">
+                <h3>Similarity Comparison</h3>
+                <canvas id="similarityChart"></canvas>
+            </div>
+
+            <div class="document-info">
+                <h3>Document Statistics</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Document 1 Length:</span>
+                        <span class="info-value" id="doc1-length">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Document 1 Words:</span>
+                        <span class="info-value" id="doc1-words">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Document 2 Length:</span>
+                        <span class="info-value" id="doc2-length">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Document 2 Words:</span>
+                        <span class="info-value" id="doc2-words">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="average-similarity">
+                <h3>Average Similarity Score</h3>
+                <div class="avg-score" id="avg-score">-</div>
+            </div>
+
+            <div class="embeddings-section">
+                <h3>Vector Embeddings Analysis</h3>
+                
+                <details class="collapsible-section">
+                    <summary class="collapsible-header">
+                        <span>TF-IDF Vectors (Document 1)</span>
+                        <span class="toggle-icon">▼</span>
+                    </summary>
+                    <div class="collapsible-content" id="tfidf-doc1">
+                        <p class="loading-text">Upload and analyze documents to view embeddings</p>
+                    </div>
+                </details>
+
+                <details class="collapsible-section">
+                    <summary class="collapsible-header">
+                        <span>TF-IDF Vectors (Document 2)</span>
+                        <span class="toggle-icon">▼</span>
+                    </summary>
+                    <div class="collapsible-content" id="tfidf-doc2">
+                        <p class="loading-text">Upload and analyze documents to view embeddings</p>
+                    </div>
+                </details>
+
+                <details class="collapsible-section">
+                    <summary class="collapsible-header">
+                        <span>BERT Embeddings (Sample - First 10 Dimensions)</span>
+                        <span class="toggle-icon">▼</span>
+                    </summary>
+                    <div class="collapsible-content" id="bert-embeddings">
+                        <p class="loading-text">Upload and analyze documents to view embeddings</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

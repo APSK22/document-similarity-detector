@@ -1,0 +1,6 @@
+# Additional requirements for Jupyter Notebook
+jupyter
+ipykernel
+matplotlib
+seaborn
+pandas

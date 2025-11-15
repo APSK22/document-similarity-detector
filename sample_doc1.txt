@@ -1,0 +1,12 @@
+# Sample Document 1
+
+This is a sample text document about artificial intelligence and machine learning.
+Artificial intelligence has revolutionized many industries including healthcare, finance, and transportation.
+
+Machine learning algorithms can analyze vast amounts of data and identify patterns that humans might miss.
+Deep learning, a subset of machine learning, uses neural networks to process information in layers.
+
+Natural language processing enables computers to understand and generate human language.
+Computer vision allows machines to interpret and understand visual information from the world.
+
+The future of AI includes advancements in robotics, autonomous systems, and personalized medicine.
